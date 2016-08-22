@@ -30,8 +30,6 @@
 
   - wire up compass
 
-  - get serial screen working, outputting what would be in the console
-
   - write code for the compass to auto align when not much is happening
 
   - create a heading compass system, later when we have two robots we NOTE: i have pre setup the variables
@@ -54,10 +52,14 @@
 
     SOLUTION: the bars issue is still happening but has been resolved by changing directions in which the motors move. apparently the motor
     controllers do not like some movements and will go backwards !? kinda problematic.. will investigate after comp.
+    
+  - ADDED: speed control support for the motor controllers, so we dont tear apart the mat. 
 
 
   DROP LIST:
 
   - Not necessary: Re-Writing Main setup code in a seperate file, debunk the code issue and decide if its a hardware issue
+  
+  - Too Much overhead and takes CPU cycles: get serial screen working, outputting what would be in the console
 
 
