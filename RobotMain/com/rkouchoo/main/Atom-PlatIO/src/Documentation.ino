@@ -36,6 +36,12 @@
 
   TODO LIST:
 
+    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    - MAKE THE ROBOT FUCKING WORK YOU ASS YOU HAVE 1 DAY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
   - Set up light sensor hardware in robot
 
   - create a startup config program for the light sensors

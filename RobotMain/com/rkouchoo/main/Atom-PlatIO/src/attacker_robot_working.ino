@@ -33,7 +33,7 @@
   #define CompassRegister 0x03
   #define CompassByteLength 6
 
-  static int LooPdelay = 5;
+  static int LoopDelay = 5;
 
   int CompassX; //compass headings
   int CompassY;
@@ -233,7 +233,87 @@ int DirectionAngle(byte Direction)
 {
   return Direction * 30 - 150;
 }
+//============================================================================================
 
+void CompassInit() {
+
+    //initialise compass
+    Wire.begin();
+    Wire.beginTransmission(CompassAddress); //open comms to the compass
+    Wire.write(CompassMode); //select mode register
+    Wire.write(CompassReadMode); //continuous measurement mode
+    Wire.endTransmission();
+    Wire.beginTransmission(CompassAddress);
+    Wire.write(CompassRegister); //select register 3, X MSB register, these valuses were found on the data sheet.
+    Wire.endTransmission();
+
+    //request data from the comnpass
+    Wire.requestFrom(CompassAddress, CompassByteLength);
+
+    //request data and set original direction, will be used for auto correct in the future.
+    if(CompassByteLength<=Wire.available()){
+      CompassOriginalDirection_Z = Wire.read()<<8; //Z msb
+      CompassOriginalDirection_Z |= Wire.read(); //Z lsb
+    }
+
+
+    //Tell the Compass where to begin reading  directional data
+    Wire.beginTransmission(CompassAddress);
+    Wire.write(CompassRegister); //select register 3, X MSB register
+    Wire.endTransmission();
+
+     Wire.requestFrom(CompassAddress, CompassByteLength);
+
+    if(CompassByteLength<=Wire.available()){
+      CompassX = Wire.read()<<8; //X msb
+      CompassX |= Wire.read(); //X lsb
+
+      CompassZ = Wire.read()<<8; //Z msb
+      CompassZ |= Wire.read(); //Z lsb
+
+      CompassY = Wire.read()<<8; //Y msb
+      CompassY |= Wire.read(); //Y lsb
+    }
+
+}
+
+void LightSensor() {
+
+  //Serial.println("LightSensor value = " + RightLightsensorValue + ", " + LeftLightsensorValue);
+
+  //LIGHT & Movement
+
+  RightLightsensorValue = analogRead(LightsensorInput_1);
+  LeftLightsensorValue = analogRead(LightsensorInput_2);
+ //cond combo 1
+  if (LightsensorValue == COLOR_WHITE_VALUE)
+  {
+   if (IsMovingLeft = true)
+     {
+     MoveFORWARDRIGHT();
+     Serial.println("boolean - IsMovingLeft - MoveFORWARDRIGHT()");
+     }
+  }
+ //cond combo 2
+  if (LightsensorValue == COLOR_WHITE_VALUE)
+  {
+    if (IsMovingRight = true)
+    {
+      MoveFORWARDLEFT();
+      Serial.println("boolean - IsMovingRight - MoveFORWARDLEFT()");
+    }
+  }
+ //cond combo 3
+  if (LightsensorValue == COLOR_WHITE_VALUE)
+  {
+    if (IsMovingForward = true)
+    {
+      MoveBACKWARD();
+      Serial.println("boolean - IsMovingForward - MoveBACKWARD()");
+    }
+  }
+
+}
 
 //============================================================================================
 //                                      Motor Functions
@@ -384,52 +464,52 @@ void TurnRIGHT() {
 }
 //=============================================================================================
 void SetMotorSpeedLOW() {
-  digitalWrite(Motor_EN_S_1_1, MotorLOW_POWER);
-  digitalWrite(Motor_EN_S_1_2, MotorLOW_POWER);
-  digitalWrite(Motor_EN_S_2_1, MotorLOW_POWER);
-  digitalWrite(Motor_EN_S_2_2, MotorLOW_POWER);
+  analogWrite(Motor_EN_S_1_1, MotorLOW_POWER);
+  analogWrite(Motor_EN_S_1_2, MotorLOW_POWER);
+  analogWrite(Motor_EN_S_2_1, MotorLOW_POWER);
+  analogWrite(Motor_EN_S_2_2, MotorLOW_POWER);
 
   delay(50);
 
-  digitalWrite(Motor_EN_S_1_1, LOW);
-  digitalWrite(Motor_EN_S_1_2, LOW);
-  digitalWrite(Motor_EN_S_2_1, LOW);
-  digitalWrite(Motor_EN_S_2_2, LOW);
+  analogWrite(Motor_EN_S_1_1, LOW);
+  analogWrite(Motor_EN_S_1_2, LOW);
+  analogWrite(Motor_EN_S_2_1, LOW);
+  analogWrite(Motor_EN_S_2_2, LOW);
 }
 
 void SetMotorSpeedMED() {
-  digitalWrite(Motor_EN_S_1_1, MotorMED_POWER);
-  digitalWrite(Motor_EN_S_1_2, MotorMED_POWER);
-  digitalWrite(Motor_EN_S_2_1, MotorMED_POWER);
-  digitalWrite(Motor_EN_S_2_2, MotorMED_POWER);
+  analogWrite(Motor_EN_S_1_1, MotorMED_POWER);
+  analogWrite(Motor_EN_S_1_2, MotorMED_POWER);
+  analogWrite(Motor_EN_S_2_1, MotorMED_POWER);
+  analogWrite(Motor_EN_S_2_2, MotorMED_POWER);
 
   delay(50);
 
-  digitalWrite(Motor_EN_S_1_1, LOW);
-  digitalWrite(Motor_EN_S_1_2, LOW);
-  digitalWrite(Motor_EN_S_2_1, LOW);
-  digitalWrite(Motor_EN_S_2_2, LOW);
+  analogWrite(Motor_EN_S_1_1, LOW);
+  analogWrite(Motor_EN_S_1_2, LOW);
+  analogWrite(Motor_EN_S_2_1, LOW);
+  analogWrite(Motor_EN_S_2_2, LOW);
 }
 
 void SetMotorSpeedHIGH() {
-  digitalWrite(Motor_EN_S_1_1, MotorFULL_POWER);
-  digitalWrite(Motor_EN_S_1_2, MotorFULL_POWER);
-  digitalWrite(Motor_EN_S_2_1, MotorFULL_POWER);
-  digitalWrite(Motor_EN_S_2_2, MotorFULL_POWER);
+  analogWrite(Motor_EN_S_1_1, MotorFULL_POWER);
+  analogWrite(Motor_EN_S_1_2, MotorFULL_POWER);
+  analogWrite(Motor_EN_S_2_1, MotorFULL_POWER);
+  analogWrite(Motor_EN_S_2_2, MotorFULL_POWER);
 
   delay(50);
 
-  digitalWrite(Motor_EN_S_1_1, LOW);
-  digitalWrite(Motor_EN_S_1_2, LOW);
-  digitalWrite(Motor_EN_S_2_1, LOW);
-  digitalWrite(Motor_EN_S_2_2, LOW);
+  analogWrite(Motor_EN_S_1_1, LOW);
+  analogWrite(Motor_EN_S_1_2, LOW);
+  analogWrite(Motor_EN_S_2_1, LOW);
+  analogWrite(Motor_EN_S_2_2, LOW);
 }
 
 void SetMotorSpeedOFF(){
-  digitalWrite(Motor_EN_S_1_1, LOW);
-  digitalWrite(Motor_EN_S_1_2, LOW);
-  digitalWrite(Motor_EN_S_2_1, LOW);
-  digitalWrite(Motor_EN_S_2_2, LOW);
+  analogWrite(Motor_EN_S_1_1, LOW);
+  analogWrite(Motor_EN_S_1_2, LOW);
+  analogWrite(Motor_EN_S_2_1, LOW);
+  analogWrite(Motor_EN_S_2_2, LOW);
 }
 
 
@@ -460,27 +540,6 @@ void setup() {
   pinMode(Motor4A, OUTPUT);
   pinMode(Motor4B, OUTPUT);
 
-/*
-  //initialise compass
-  Wire.begin();
-  Wire.beginTransmission(CompassAddress); //open comms to the compass
-  Wire.write(CompassMode); //select mode register
-  Wire.write(CompassReadMode); //continuous measurement mode
-  Wire.endTransmission();
-  Wire.beginTransmission(CompassAddress);
-  Wire.write(CompassRegister); //select register 3, X MSB register, these valuses were found on the data sheet.
-  Wire.endTransmission();
-
-  //request data from the comnpass
-  Wire.requestFrom(CompassAddress, CompassByteLength);
-
-  //request data and set original direction, will be used for auto correct in the future.
-  if(CompassByteLength<=Wire.available()){
-    CompassOriginalDirection_Z = Wire.read()<<8; //Z msb
-    CompassOriginalDirection_Z |= Wire.read(); //Z lsb
-  }
-*/
-
   Serial.println("HiTechnic IRSeeker V2 Initialised, robot has been initialised, loop program will now commence !");
   Serial.println("QUICK DEBUG: Compass start rotation = " + CompassOriginalDirection_Z);
 }
@@ -497,67 +556,12 @@ void setup() {
   byte Direction = InfraredBall.Direction;
   SetMotorSpeedOFF();
 
-/*7
-  //Tell the Compass where to begin reading  directional data
-  Wire.beginTransmission(CompassAddress);
-  Wire.write(CompassRegister); //select register 3, X MSB register
-  Wire.endTransmission();
-
-   Wire.requestFrom(CompassAddress, CompassByteLength);
-
-  if(CompassByteLength<=Wire.available()){
-    CompassX = Wire.read()<<8; //X msb
-    CompassX |= Wire.read(); //X lsb
-
-    CompassZ = Wire.read()<<8; //Z msb
-    CompassZ |= Wire.read(); //Z lsb
-
-    CompassY = Wire.read()<<8; //Y msb
-    CompassY |= Wire.read(); //Y lsb
-  }
-
 //===========================================================================
-
-   Serial.println("LightSensor value = " + RightLightsensorValue);
-
-   //LIGHT & Movement
-
-   RightLightsensorValue = analogRead(LightsensorInput_1);
-   LeftLightsensorValue = analogRead(LightsensorInput_2);
-  //cond combo 1
-   if (LightsensorValue == COLOR_WHITE_VALUE)
-   {
-    if (IsMovingLeft = true)
-      {
-      MoveFORWARDRIGHT();
-      Serial.println("boolean - IsMovingLeft - MoveFORWARDRIGHT()");
-      }
-   }
-  //cond combo 2
-   if (LightsensorValue == COLOR_WHITE_VALUE)
-   {
-     if (IsMovingRight = true)
-     {
-       MoveFORWARDLEFT();
-       Serial.println("boolean - IsMovingRight - MoveFORWARDLEFT()");
-     }
-   }
-  //cond combo 3
-   if (LightsensorValue == COLOR_WHITE_VALUE)
-   {
-     if (IsMovingForward = true)
-     {
-       MoveBACKWARD();
-       Serial.println("boolean - IsMovingForward - MoveBACKWARD()");
-     }
-   }
-*/
    //conditionals for LightSensor Movement var
    boolean IsMovingLeft = false;
    boolean IsMovingRight = false;
    boolean IsMovingBackward = false;
    boolean IsMovingForward = false;
-
 //==========================================================================
 
   if (InfraredBall.Direction == 1)
@@ -594,7 +598,6 @@ void setup() {
   SetMotorSpeedOFF();
   Serial.println("InfraredBall.Direction = 4, MoveFORWARD()");
   boolean IsMovingForward = true;
-  delay(LooPdelay);
   }
 
   if (InfraredBall.Direction == 5)
@@ -622,7 +625,6 @@ void setup() {
   SetMotorSpeedOFF();
   Serial.println("InfraredBall.Direction = 7, MoveFORWARDLEFT()");
   boolean IsMovingLeft = true;
-  delay(LooPdelay);
   }
 
   if (InfraredBall.Direction == 8)
@@ -653,4 +655,5 @@ void setup() {
   SetMotorSpeedOFF();
   boolean IsMovingRight = true;
   }
+  delay(LoopDelay);
 }
