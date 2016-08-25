@@ -13,11 +13,11 @@
   CURRENT STATE:
   ===============
     
-    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    - MAKE THE ROBOT FUCKING WORK YOU ASS YOU HAVE 1 DAY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    - MAKE THE ROBOT FUCKING WORK YOU ASS YOU HAVE 1 DAY !
 
-    +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    ++++++++++++++++++++++++++++++++++++++++++++++++++++++
   WORKING ON CURRENTLY: Hard wiring the new light sensors and lasers to robot. Also working on a new check for system, with switches.
 
   ==============
