@@ -110,7 +110,6 @@ void initlaser() {
 
 //                          SEEKER
 //==================================================================
-#include <Wire.h>
 
 /*
   IRSeeker.ino - A class for the HiTechnic IRSeeker V2 infrared sensor.
