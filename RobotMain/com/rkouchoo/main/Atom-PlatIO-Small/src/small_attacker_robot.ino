@@ -38,6 +38,12 @@ static int Motor3B = 28;
 static int Motor4A = 29;
 static int Motor4B = 30;
 
+const int Motor_EN_S_1_1 = 2;   //motor speed pwm, possibly change?
+const int Motor_EN_S_1_2 = 3;
+const int Motor_EN_S_2_1 = 4;
+const int Motor_EN_S_2_2 = 5;
+
+
 //                          SEEKER
 //==================================================================
 
@@ -162,9 +168,60 @@ int DirectionAngle(byte Direction)
 {
   return Direction * 30 - 150;
 }
+                            //Speed Control
 //============================================================================================
 
+
+
+void SetMotorSpeedLOW() {
+  analogWrite(Motor_EN_S_1_1, MotorLOW_POWER);
+  analogWrite(Motor_EN_S_1_2, MotorLOW_POWER);
+  analogWrite(Motor_EN_S_2_1, MotorLOW_POWER);
+  analogWrite(Motor_EN_S_2_2, MotorLOW_POWER);
+
+  delay(50);
+
+  analogWrite(Motor_EN_S_1_1, LOW);
+  analogWrite(Motor_EN_S_1_2, LOW);
+  analogWrite(Motor_EN_S_2_1, LOW);
+  analogWrite(Motor_EN_S_2_2, LOW);
 }
+
+void SetMotorSpeedMED() {
+  analogWrite(Motor_EN_S_1_1, MotorMED_POWER);
+  analogWrite(Motor_EN_S_1_2, MotorMED_POWER);
+  analogWrite(Motor_EN_S_2_1, MotorMED_POWER);
+  analogWrite(Motor_EN_S_2_2, MotorMED_POWER);
+
+  delay(50);
+
+  analogWrite(Motor_EN_S_1_1, LOW);
+  analogWrite(Motor_EN_S_1_2, LOW);
+  analogWrite(Motor_EN_S_2_1, LOW);
+  analogWrite(Motor_EN_S_2_2, LOW);
+}
+
+void SetMotorSpeedHIGH() {
+  analogWrite(Motor_EN_S_1_1, MotorFULL_POWER);
+  analogWrite(Motor_EN_S_1_2, MotorFULL_POWER);
+  analogWrite(Motor_EN_S_2_1, MotorFULL_POWER);
+  analogWrite(Motor_EN_S_2_2, MotorFULL_POWER);
+
+  delay(50);
+
+  analogWrite(Motor_EN_S_1_1, LOW);
+  analogWrite(Motor_EN_S_1_2, LOW);
+  analogWrite(Motor_EN_S_2_1, LOW);
+  analogWrite(Motor_EN_S_2_2, LOW);
+}
+
+void SetMotorSpeedOFF(){
+  analogWrite(Motor_EN_S_1_1, LOW);
+  analogWrite(Motor_EN_S_1_2, LOW);
+  analogWrite(Motor_EN_S_2_1, LOW);
+  analogWrite(Motor_EN_S_2_2, LOW);
+}
+
 void setup() {
 
 
