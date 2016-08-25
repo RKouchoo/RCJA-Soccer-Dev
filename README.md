@@ -26,28 +26,6 @@
   currently have not implemented methods for use of a soleniod+transformer/boost converter as i cannot mount it to either of the robots & and dangerous as a high current might get us disqualified (5 AMPS+ OUTPUT)
   
 =====================================================  
-TODAYS AGENDA:
-To do list in day order: Current agenda for today
-Big Robot:
-Now:
--	MOUNT LIGHT SENSORS AND TEST 
-After school:
--	Unmount motor driver and wires 
--	Remount and reconnect wires
-
-
-Small Robot:
-Now:
--	Cut back m4 wires and connect to motor controller
--	Mount arduino and connect all wires to it
-After school:
--	When receive sensor mount and connect it
-
-
-Recess:
--	Testing which motor controllers is dead 
--	Mount light sensors 
-
 ========================================================
 
   TODO LIST:
@@ -58,23 +36,12 @@ Small Robot:
 
   - create a startup config program for the light sensors
 
-
   - write code for the compass to auto align when not much is happening (started compass intialisation)
-
-  - create a heading compass system, later when we have two robots we NOTE: i have pre setup the variables
-    can use the heading system for robots to return to original location
 
 Big Robot:
 
-- Figure out which motor driver isnt working 
-
--  Unmount motor driver that is not working and disconnect all wires and put new motor drivers.
-  
   - The fake data plays with the booleans and conditionals making the robot go in different directions.
     currently commented out that current part of the code which makes the robot change direction becuase of those.
-
-  - create a heading compass system, later when we have two robots we NOTE: i have pre setup the variables
-    can use the heading system for robots to return to original location
 
 
 After State:
@@ -86,6 +53,9 @@ After State:
   - write code for the compass to auto align when not much is happening (started compass intialisation)
 
   - Dress robot make look pretty (Leds, Lasers, Protection etc)
+  
+  - create a heading compass system, later when we have two robots we NOTE: i have pre setup the variables
+    can use the heading system for robots to return to original location
 
   CHANGELOG:
 
