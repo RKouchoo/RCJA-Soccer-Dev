@@ -25,7 +25,8 @@
   KICKER NOTICE:
   currently have not implemented methods for use of a soleniod+transformer/boost converter as i cannot mount it to either of the robots
   & and dangerous as a high current might get us disqualified (5 AMPS+ OUTPUT)
-
+=====================================================  
+TODAYS AGENDA:
 To do list in day order: Current agenda for today
 Big Robot:
 Now:
@@ -47,6 +48,7 @@ Recess:
 -	Testing which motor controllers is dead 
 -	Mount light sensors 
 
+========================================================
 
   TODO LIST:
 
