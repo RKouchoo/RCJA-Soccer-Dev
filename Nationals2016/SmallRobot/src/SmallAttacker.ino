@@ -59,6 +59,7 @@
   boolean IsMovingRight = false;
   boolean IsMovingBackward = false;
   boolean IsMovingForward = false;
+  boolean BallInRange = false;
 
   int DefendCountdown = 100;  //to be continued, look at documentation
 
@@ -115,7 +116,8 @@ void initlaser() {
   IRSeeker.ino - A class for the HiTechnic IRSeeker V2 infrared sensor.
   Created by B. Blechschmidt, August 1, 2013.
   Edited by R. Kouchoo - STRICT USE for SPX.
-  Clean version was released into the public domain.
+  Clean version which was released into the public domain cn be found here:
+  https://blog.blechschmidt.saarland/hitechnic-infrared-seeker-library-for-arduino/
 */
 
 struct InfraredResult
@@ -388,13 +390,7 @@ void MoveBACKWARD() {
   digitalWrite(Motor3B, LOW);
   digitalWrite(Motor4A, LOW);
 }
-void MoveBACKWARDRIGHT() {
-  digitalWrite(Motor1B, HIGH);
-  digitalWrite(Motor3B, HIGH);
-  delay(50);
-  digitalWrite(Motor1B, LOW);
-  digitalWrite(Motor3B, LOW);
-}
+
 void MoveFORWARDRIGHT() {
   digitalWrite(Motor1A, HIGH);
   digitalWrite(Motor3A, HIGH);
@@ -409,36 +405,7 @@ void MoveFORWARDLEFT() {
   digitalWrite(Motor2A, LOW);
   digitalWrite(Motor4B, LOW);
 }
-void MoveBACKWARDLEFT() {
-  digitalWrite(Motor2B, HIGH);
-  digitalWrite(Motor4A, HIGH);
-  delay(50);
-  digitalWrite(Motor2B, LOW);
-  digitalWrite(Motor4A, LOW);
-}
-void MoveSIDEWAYSRIGHT() {
-  digitalWrite(Motor2B, HIGH);
-  digitalWrite(Motor3A, HIGH);
-  digitalWrite(Motor1A, HIGH);
-  digitalWrite(Motor4B, HIGH);
-  delay(50);
-  digitalWrite(Motor2B, LOW);
-  digitalWrite(Motor3A, LOW);
-  digitalWrite(Motor1A, LOW);
-  digitalWrite(Motor4B, LOW);
-  }
-void MoveSIDEWAYSLEFT() {
-  digitalWrite(Motor2B, HIGH);
-  digitalWrite(Motor4A, HIGH);
-  digitalWrite(Motor1B, HIGH);
-  digitalWrite(Motor3A, HIGH);
-  delay(50);
-  digitalWrite(Motor2B, LOW);
-  digitalWrite(Motor4A, LOW);
-  digitalWrite(Motor1B, LOW);
-  digitalWrite(Motor3A, LOW);
 
-}
 void TurnLEFT() {
   digitalWrite(Motor1A, HIGH);
   digitalWrite(Motor4B, HIGH);
@@ -468,12 +435,6 @@ void SetMotorSpeedLOW() {
   analogWrite(Motor_EN_S_2_1, MotorLOW_POWER);
   analogWrite(Motor_EN_S_2_2, MotorLOW_POWER);
 
-  delay(50);
-
-  analogWrite(Motor_EN_S_1_1, LOW);
-  analogWrite(Motor_EN_S_1_2, LOW);
-  analogWrite(Motor_EN_S_2_1, LOW);
-  analogWrite(Motor_EN_S_2_2, LOW);
 }
 
 void SetMotorSpeedMED() {
@@ -482,12 +443,6 @@ void SetMotorSpeedMED() {
   analogWrite(Motor_EN_S_2_1, MotorMED_POWER);
   analogWrite(Motor_EN_S_2_2, MotorMED_POWER);
 
-  delay(50);
-
-  analogWrite(Motor_EN_S_1_1, LOW);
-  analogWrite(Motor_EN_S_1_2, LOW);
-  analogWrite(Motor_EN_S_2_1, LOW);
-  analogWrite(Motor_EN_S_2_2, LOW);
 }
 
 void SetMotorSpeedHIGH() {
@@ -496,12 +451,6 @@ void SetMotorSpeedHIGH() {
   analogWrite(Motor_EN_S_2_1, MotorFULL_POWER);
   analogWrite(Motor_EN_S_2_2, MotorFULL_POWER);
 
-  delay(50);
-
-  analogWrite(Motor_EN_S_1_1, LOW);
-  analogWrite(Motor_EN_S_1_2, LOW);
-  analogWrite(Motor_EN_S_2_1, LOW);
-  analogWrite(Motor_EN_S_2_2, LOW);
 }
 
 void SetMotorSpeedOFF(){
@@ -511,9 +460,135 @@ void SetMotorSpeedOFF(){
   analogWrite(Motor_EN_S_2_2, LOW);
 }
 
+void CompassDribble() {
+
+}
+
+void TestForBall() {
+
+  InfraredResult InfraredBall = InfraredSeeker::ReadAC();
+  byte Direction = InfraredBall.Direction;
+
+  boolean BallInRange;
+
+  if (InfraredBall.Direction > 0)
+   {
+    boolean BallInRange = true;
+  }
+
+  else;
+  {
+    boolean BallInRange = false;
+    Serial.println("BallInRange = false");
+  }
+
+}
+
+void MoveToBall() {
+  InfraredResult InfraredBall = InfraredSeeker::ReadAC();
+  byte Direction = InfraredBall.Direction;
+  //===========================================================================
+     //conditionals for LightSensor Movement var
+     boolean IsMovingLeft = false;
+     boolean IsMovingRight = false;
+     boolean IsMovingBackward = false;
+     boolean IsMovingForward = false;
+  //==========================================================================
+
+    if (InfraredBall.Direction == 1)
+    {
+    SetMotorSpeedMED();
+    TurnRIGHT();
+    //SetMotorSpeedOFF();
+    Serial.println("InfraredBall.Direction = 1, TurnRIGHT()");
+    boolean IsMovingRight = true;
+    }
+
+    if (InfraredBall.Direction == 2)
+    {
+    SetMotorSpeedLOW();
+    TurnRIGHT();
+  //  SetMotorSpeedOFF();
+    Serial.println("InfraredBall.Direction = 2, TurnRIGHT()");
+    boolean IsMovingRight = true;
+    }
+
+    if (InfraredBall.Direction == 3)
+    {
+    SetMotorSpeedLOW();
+    TurnRIGHT();
+  //  SetMotorSpeedOFF();
+    Serial.println("InfraredBall.Direction = 3, MoveFORWARDRIGHT()");
+    boolean IsMovingRight = true;
+    }
+
+    if (InfraredBall.Direction == 4)
+    {
+    SetMotorSpeedMED();
+    MoveFORWARD();
+  //  SetMotorSpeedOFF();
+    Serial.println("InfraredBall.Direction = 4, MoveFORWARD()");
+    boolean IsMovingForward = true;
+    }
+
+    if (InfraredBall.Direction == 5)
+    {
+    SetMotorSpeedHIGH();
+    MoveFORWARD();
+  //  SetMotorSpeedOFF();
+    Serial.println("InfraredBall.Direction = 5, MoveFORWARD()");
+    boolean IsMovingForward = true;
+    }
+
+    if (InfraredBall.Direction == 6)
+    {
+    SetMotorSpeedMED();
+    MoveFORWARD();
+    //SetMotorSpeedOFF();
+    Serial.println("InfraredBall.Direction = 6, MoveFORWARD()");
+    boolean IsMovingForward = true;
+    }
+
+    if (InfraredBall.Direction == 7)
+    {
+    SetMotorSpeedLOW();
+    TurnLEFT();
+    //SetMotorSpeedOFF();
+    Serial.println("InfraredBall.Direction = 7, MoveFORWARDLEFT()");
+    boolean IsMovingLeft = true;
+    }
+
+    if (InfraredBall.Direction == 8)
+    {
+    SetMotorSpeedLOW();
+    TurnLEFT();
+    //SetMotorSpeedOFF();
+    Serial.println("InfraredBall.Direction = 8, TurnLEFT()");
+    boolean IsMovingLeft = true;
+    }
+
+    if (InfraredBall.Direction == 9)
+    {
+    SetMotorSpeedMED();
+    TurnLEFT();
+ SetMotorSpeedOFF();
+    Serial.println("InfraredBall.Direction = 9, TurnLEFT()");
+    boolean IsMovingLeft = true;
+    }
+
+  //==================================================================
+
+    if (InfraredBall.Direction == 0)
+    {
+    Serial.println("Wh-Wo-Jo-La Do ? - TurnRIGHT()");
+    SetMotorSpeedLOW();
+    TurnRIGHT();
+    //SetMotorSpeedOFF();
+    boolean IsMovingRight = true;
+    }
+}
 
  //==========================================================================
-
 
 void setup() {
   //initialise serial broadcast
@@ -553,106 +628,9 @@ void setup() {
 
   InfraredResult InfraredBall = InfraredSeeker::ReadAC();
   byte Direction = InfraredBall.Direction;
-  SetMotorSpeedOFF();
 
-//===========================================================================
-   //conditionals for LightSensor Movement var
-   boolean IsMovingLeft = false;
-   boolean IsMovingRight = false;
-   boolean IsMovingBackward = false;
-   boolean IsMovingForward = false;
-//==========================================================================
+  MoveToBall();
 
-  if (InfraredBall.Direction == 1)
-  {
-  SetMotorSpeedMED();
-  TurnRIGHT();
-  SetMotorSpeedOFF();
-  Serial.println("InfraredBall.Direction = 1, TurnRIGHT()");
-  boolean IsMovingRight = true;
-  }
 
-  if (InfraredBall.Direction == 2)
-  {
-  SetMotorSpeedLOW();
-  TurnRIGHT();
-  SetMotorSpeedOFF();
-  Serial.println("InfraredBall.Direction = 2, TurnRIGHT()");
-  boolean IsMovingRight = true;
-  }
 
-  if (InfraredBall.Direction == 3)
-  {
-  SetMotorSpeedLOW();
-  TurnRIGHT();
-  SetMotorSpeedOFF();
-  Serial.println("InfraredBall.Direction = 3, MoveFORWARDRIGHT()");
-  boolean IsMovingRight = true;
-  }
-
-  if (InfraredBall.Direction == 4)
-  {
-  SetMotorSpeedMED();
-  MoveFORWARD();
-  SetMotorSpeedOFF();
-  Serial.println("InfraredBall.Direction = 4, MoveFORWARD()");
-  boolean IsMovingForward = true;
-  }
-
-  if (InfraredBall.Direction == 5)
-  {
-  SetMotorSpeedHIGH();
-  MoveFORWARD();
-  SetMotorSpeedOFF();
-  Serial.println("InfraredBall.Direction = 5, MoveFORWARD()");
-  boolean IsMovingForward = true;
-  }
-
-  if (InfraredBall.Direction == 6)
-  {
-  SetMotorSpeedMED();
-  MoveFORWARD();
-  SetMotorSpeedOFF();
-  Serial.println("InfraredBall.Direction = 6, MoveFORWARD()");
-  boolean IsMovingForward = true;
-  }
-
-  if (InfraredBall.Direction == 7)
-  {
-  SetMotorSpeedLOW();
-  TurnLEFT();
-  SetMotorSpeedOFF();
-  Serial.println("InfraredBall.Direction = 7, MoveFORWARDLEFT()");
-  boolean IsMovingLeft = true;
-  }
-
-  if (InfraredBall.Direction == 8)
-  {
-  SetMotorSpeedLOW();
-  TurnLEFT();
-  SetMotorSpeedOFF();
-  Serial.println("InfraredBall.Direction = 8, TurnLEFT()");
-  boolean IsMovingLeft = true;
-  }
-
-  if (InfraredBall.Direction == 9)
-  {
-  SetMotorSpeedMED();
-  TurnLEFT();
-  SetMotorSpeedOFF();
-  Serial.println("InfraredBall.Direction = 9, TurnLEFT()");
-  boolean IsMovingLeft = true;
-  }
-
-//==================================================================
-
-  if (InfraredBall.Direction == 0)
-  {
-  Serial.println("Wh-Wo-Jo-La Do ? - TurnRIGHT()");
-  SetMotorSpeedLOW();
-  TurnRIGHT();
-  SetMotorSpeedOFF();
-  boolean IsMovingRight = true;
-  }
-  delay(LoopDelay);
 }
