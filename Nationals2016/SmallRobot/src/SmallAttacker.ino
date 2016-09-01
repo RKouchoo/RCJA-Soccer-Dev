@@ -52,6 +52,8 @@
   const int LightsensorInput_1 = A0; //lightsensor analog read pin
   const int LightsensorInput_2 = A1;
 
+  const int BeamBreakInput = 34;
+
   int COLOR_GREEN_VALUE = 23;     //colour values which need to be changed, depends on feild lighting !
   int COLOR_WHITE_VALUE = 245;
 
@@ -59,15 +61,18 @@
   boolean IsMovingRight = false;
   boolean IsMovingBackward = false;
   boolean IsMovingForward = false;
+
   boolean BallInRange = false;
   boolean HasBall = false;
+  boolean BallIsTrue = false;
+  boolean BallBeamBroken = false;
 
   int DefendCountdown = 100;  //to be continued, look at documentation
 
   const int MotorMED_POWER = 115;  //can be used for motor setup functions max 255, -- will use when pwm cables are connected
   const int MotorFULL_POWER = 255;
   const int MotorLOW_POWER = 25;
-  int CurrentMotorSpeed; //the speed that will change depending on disntance from the ball.
+  int CurrentMotorSpeed = 0; //the speed that will change depending on disntance from the ball.
                                   //pwm speed and enable pins for the motor controllers
   const int Motor_EN_S_1_1 = 2;
   const int Motor_EN_S_1_2 = 3;
@@ -282,8 +287,6 @@ void CompassInit() {
 
 void LightSensor() {
 
-  //Serial.println("LightSensor value = " + RightLightsensorValue + ", " + LeftLightsensorValue);
-
   //LIGHT & Movement
 
   RightLightsensorValue = analogRead(LightsensorInput_1);
@@ -467,9 +470,6 @@ void SetMotorSpeedOFF(){
   analogWrite(Motor_EN_S_2_2, LOW);
 }
 
-void CompassDribble() {
-
-}
 
 void TestForBall() {
 
@@ -607,15 +607,44 @@ void DistanceMotorSpeed() {
     CurrentMotorSpeed = MotorFULL_POWER;
   }
 
-  if (InfraredBall.Strength >= 145)
+  if (InfraredBall.Strength <= 145)
   {
     CurrentMotorSpeed = MotorMED_POWER;
   }
 
-  if (InfraredBall.Strength >= 65)
+  if (InfraredBall.Strength <= 65)
   {
     CurrentMotorSpeed = MotorLOW_POWER;
   }
+
+}
+
+void CheckIfHasBall() {
+
+  int  BeamBreakTest = digitalRead(BeamBreakInput);
+
+  if (BeamBreakTest = HIGH) {
+  boolean BallIsTrue = true;
+  }
+  else;
+  {
+    boolean BallIsTrue = false;
+  }
+
+  if (BallIsTrue = true)
+  {
+    boolean BallBeamBroken = true;
+  }
+  else;
+  {
+    boolean BallBeamBroken = false;
+  }
+
+  if (BallBeamBroken = true)
+  {
+    Serial.println("Beam has been broken!");
+  }
+
 }
 
 void SetCurrentMotorSpeed() {
@@ -623,6 +652,10 @@ void SetCurrentMotorSpeed() {
   analogWrite(Motor_EN_S_1_2, CurrentMotorSpeed);
   analogWrite(Motor_EN_S_2_1, CurrentMotorSpeed);
   analogWrite(Motor_EN_S_2_2, CurrentMotorSpeed);
+
+}
+
+void Dribble() {
 
 }
  //==========================================================================
@@ -641,6 +674,8 @@ void setup() {
   pinMode(Motor_EN_S_1_2, OUTPUT);
   pinMode(Motor_EN_S_2_1, OUTPUT);
   pinMode(Motor_EN_S_2_2, OUTPUT);
+
+  pinMode(BeamBreakInput, INPUT);
 
   pinMode(Motor1A, OUTPUT);
   pinMode(Motor1B, OUTPUT);
@@ -669,6 +704,8 @@ void setup() {
   TestForBall();
   DistanceMotorSpeed();
   MoveToBall();
+  CheckIfHasBall();
+  Dribble();
 
 
 
