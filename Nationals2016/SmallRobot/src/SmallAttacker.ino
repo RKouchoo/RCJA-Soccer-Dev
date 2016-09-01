@@ -60,12 +60,14 @@
   boolean IsMovingBackward = false;
   boolean IsMovingForward = false;
   boolean BallInRange = false;
+  boolean HasBall = false;
 
   int DefendCountdown = 100;  //to be continued, look at documentation
 
   const int MotorMED_POWER = 115;  //can be used for motor setup functions max 255, -- will use when pwm cables are connected
   const int MotorFULL_POWER = 255;
   const int MotorLOW_POWER = 25;
+  int CurrentMotorSpeed; //the speed that will change depending on disntance from the ball.
                                   //pwm speed and enable pins for the motor controllers
   const int Motor_EN_S_1_1 = 2;
   const int Motor_EN_S_1_2 = 3;
@@ -453,6 +455,11 @@ void SetMotorSpeedHIGH() {
 
 }
 
+void CompassRotate() {
+  if (HasBall = true){
+
+  }
+}
 void SetMotorSpeedOFF(){
   analogWrite(Motor_EN_S_1_1, LOW);
   analogWrite(Motor_EN_S_1_2, LOW);
@@ -494,10 +501,12 @@ void MoveToBall() {
      boolean IsMovingBackward = false;
      boolean IsMovingForward = false;
   //==========================================================================
+ if (BallInRange = true)
+ {
 
     if (InfraredBall.Direction == 1)
     {
-    SetMotorSpeedMED();
+    SetCurrentMotorSpeed();
     TurnRIGHT();
     //SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 1, TurnRIGHT()");
@@ -506,7 +515,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 2)
     {
-    SetMotorSpeedLOW();
+    SetCurrentMotorSpeed();
     TurnRIGHT();
   //  SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 2, TurnRIGHT()");
@@ -515,7 +524,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 3)
     {
-    SetMotorSpeedLOW();
+    SetCurrentMotorSpeed();
     TurnRIGHT();
   //  SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 3, MoveFORWARDRIGHT()");
@@ -524,7 +533,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 4)
     {
-    SetMotorSpeedMED();
+    SetCurrentMotorSpeed();
     MoveFORWARD();
   //  SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 4, MoveFORWARD()");
@@ -533,7 +542,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 5)
     {
-    SetMotorSpeedHIGH();
+    SetCurrentMotorSpeed();
     MoveFORWARD();
   //  SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 5, MoveFORWARD()");
@@ -542,7 +551,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 6)
     {
-    SetMotorSpeedMED();
+    SetCurrentMotorSpeed();
     MoveFORWARD();
     //SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 6, MoveFORWARD()");
@@ -551,7 +560,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 7)
     {
-    SetMotorSpeedLOW();
+    SetCurrentMotorSpeed();
     TurnLEFT();
     //SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 7, MoveFORWARDLEFT()");
@@ -560,7 +569,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 8)
     {
-    SetMotorSpeedLOW();
+    SetCurrentMotorSpeed();
     TurnLEFT();
     //SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 8, TurnLEFT()");
@@ -569,9 +578,8 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 9)
     {
-    SetMotorSpeedMED();
+    SetCurrentMotorSpeed();;
     TurnLEFT();
- SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 9, TurnLEFT()");
     boolean IsMovingLeft = true;
     }
@@ -586,8 +594,37 @@ void MoveToBall() {
     //SetMotorSpeedOFF();
     boolean IsMovingRight = true;
     }
+  };
 }
 
+void DistanceMotorSpeed() {
+  InfraredResult InfraredBall = InfraredSeeker::ReadAC();
+  byte Direction = InfraredBall.Direction;
+  byte Strength = InfraredBall.Strength;
+
+  if (InfraredBall.Strength >= 200)
+  {
+    CurrentMotorSpeed = MotorFULL_POWER;
+  }
+
+  if (InfraredBall.Strength >= 145)
+  {
+    CurrentMotorSpeed = MotorMED_POWER;
+  }
+
+  if (InfraredBall.Strength >= 65)
+  {
+    CurrentMotorSpeed = MotorLOW_POWER;
+  }
+}
+
+void SetCurrentMotorSpeed() {
+  analogWrite(Motor_EN_S_1_1, CurrentMotorSpeed);
+  analogWrite(Motor_EN_S_1_2, CurrentMotorSpeed);
+  analogWrite(Motor_EN_S_2_1, CurrentMotorSpeed);
+  analogWrite(Motor_EN_S_2_2, CurrentMotorSpeed);
+
+}
  //==========================================================================
 
 void setup() {
@@ -629,7 +666,12 @@ void setup() {
   InfraredResult InfraredBall = InfraredSeeker::ReadAC();
   byte Direction = InfraredBall.Direction;
 
+  TestForBall();
+  DistanceMotorSpeed();
   MoveToBall();
+
+
+
 
 
 
