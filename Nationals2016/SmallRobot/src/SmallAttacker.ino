@@ -79,6 +79,7 @@
   const int Motor_EN_S_2_1 = 4;
   const int Motor_EN_S_2_2 = 5;
 
+  const int DribbleEn = 7;
 
   const int Motor1A = 38; //motor input pins A is forward, B is reverse
   const int Motor1B = 40;
@@ -91,6 +92,9 @@
 
   const int Motor4A = 50;
   const int Motor4B = 52;
+
+  const int DribbleMotorA = 60;
+  const int DribbleMotorB = 59;
 
   const int LED_PWM_MAX_RATE = 255; //lighting stuff
   const int LED_PWM_MIN_RATE = 25;
@@ -655,8 +659,23 @@ void SetCurrentMotorSpeed() {
 
 }
 
-void Dribble() {
+void HasBallThenDribble() {
+  if (HasBall = true) {
+    analogWrite(DribbleEn, MotorMED_POWER);
+    DribbleA();
+  }
+}
 
+void DribbleA() {
+  digitalWrite(DribbleMotorA, HIGH);
+  delay(25);
+  digitalWrite(DribbleMotorA, LOW);
+}
+
+void DribbleB() {
+  digitalWrite(DribbleMotorA, HIGH);
+  delay(25);
+  digitalWrite(DribbleMotorB, LOW);
 }
  //==========================================================================
 
@@ -675,6 +694,9 @@ void setup() {
   pinMode(Motor_EN_S_2_1, OUTPUT);
   pinMode(Motor_EN_S_2_2, OUTPUT);
 
+  pinMode(DribbleMotorA, OUTPUT);
+  pinMode(DribbleMotorB, OUTPUT);
+  
   pinMode(BeamBreakInput, INPUT);
 
   pinMode(Motor1A, OUTPUT);
@@ -705,7 +727,8 @@ void setup() {
   DistanceMotorSpeed();
   MoveToBall();
   CheckIfHasBall();
-  Dribble();
+  HasBallThenDribble();
+
 
 
 
