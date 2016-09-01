@@ -13,12 +13,8 @@
   CURRENT STATE:
   ===============
     
-    ++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    - MAKE THE ROBOT FUCKING WORK YOU ASS YOU HAVE 1 DAY !
-
-    ++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  WORKING ON CURRENTLY: Hard wiring the new light sensors and lasers to robot. Also working on a new check for system, with switches.
+ 
+  WORKING ON CURRENTLY: Hard wiring the new light sensors to robot. Also working on a new check for system, with switches.
 
   ==============
 
@@ -32,17 +28,13 @@
 
 Small Robot:
 
-  - Set up light sensor hardware in robot
-
-  - create a startup config program for the light sensors
-
+  - Mount compass
+  - Mount kicker stuff
+  - Mount booster circuit and work it out
   - write code for the compass to auto align when not much is happening (started compass intialisation)
 
 Big Robot:
-
-  - The fake data plays with the booleans and conditionals making the robot go in different directions.
-    currently commented out that current part of the code which makes the robot change direction becuase of those.
-
+- Need to fix why sensors are fucking with us
 
 After State:
   - Put compass on both robots
