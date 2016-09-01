@@ -66,6 +66,7 @@
   boolean HasBall = false;
   boolean BallIsTrue = false;
   boolean BallBeamBroken = false;
+  boolean isDribbling = false;
 
   int DefendCountdown = 100;  //to be continued, look at documentation
 
