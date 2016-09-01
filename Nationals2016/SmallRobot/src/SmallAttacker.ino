@@ -115,8 +115,7 @@ void RobotInitLights() {
 void initlaser() {
  pinMode(LASER_OUTPUT_1, OUTPUT);
  pinMode(LASER_OUTPUT_2, OUTPUT);
-
-  digitalWrite(LASER_OUTPUT_1, HIGH);
+ digitalWrite(LASER_OUTPUT_1, HIGH);
  digitalWrite(LASER_OUTPUT_2, HIGH);
  }
 
@@ -462,18 +461,12 @@ void SetMotorSpeedHIGH() {
 
 }
 
-void CompassRotate() {
-  if (HasBall = true){
-
-  }
-}
 void SetMotorSpeedOFF(){
   analogWrite(Motor_EN_S_1_1, LOW);
   analogWrite(Motor_EN_S_1_2, LOW);
   analogWrite(Motor_EN_S_2_1, LOW);
   analogWrite(Motor_EN_S_2_2, LOW);
 }
-
 
 void TestForBall() {
 
@@ -592,7 +585,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 0)
     {
-    Serial.println("Wh-Wo-Jo-La Do ? - TurnRIGHT()");
+    Serial.println("What-Would-Joseph-Lai-Do ? - TurnRIGHT()");
     SetMotorSpeedLOW();
     TurnRIGHT();
     //SetMotorSpeedOFF();
@@ -665,7 +658,6 @@ void HasBallThenDribble() {
     DribbleA();
   }
 }
-
 void DribbleA() {
   digitalWrite(DribbleMotorA, HIGH);
   delay(25);
@@ -677,6 +669,36 @@ void DribbleB() {
   delay(25);
   digitalWrite(DribbleMotorB, LOW);
 }
+//==========================================================================
+
+void CompassConfigure() {
+  //initialise compass
+  Wire.begin();
+  Wire.beginTransmission(CompassAddress); //open comms to the compass
+  Wire.write(CompassMode); //select mode register
+  Wire.write(CompassReadMode); //continuous measurement mode
+  Wire.endTransmission();
+  Wire.beginTransmission(CompassAddress);
+  Wire.write(CompassRegister); //select register 3, X MSB register, these valuses were found on the data sheet.
+  Wire.endTransmission();
+
+  //request data from the comnpass
+  Wire.requestFrom(CompassAddress, CompassByteLength);
+
+  //request data and set original direction, will be used for auto correct in the future.
+  if(CompassByteLength<=Wire.available()){
+    CompassOriginalDirection_Z = Wire.read()<<8; //Z msb
+    CompassOriginalDirection_Z |= Wire.read(); //Z lsb
+  }
+  Serial.println("Compass Original Var: " + CompassOriginalDirection_Z);
+}
+
+void CompassRotate() {
+  if (HasBall = true){
+
+  }
+}
+
  //==========================================================================
 
 void setup() {
@@ -688,6 +710,9 @@ void setup() {
   initlaser();
   InfraredSeeker::Initialize();
 
+  CompassConfigure();
+
+
 //initialise motor outputs
   pinMode(Motor_EN_S_1_1, OUTPUT);
   pinMode(Motor_EN_S_1_2, OUTPUT);
@@ -696,7 +721,7 @@ void setup() {
 
   pinMode(DribbleMotorA, OUTPUT);
   pinMode(DribbleMotorB, OUTPUT);
-  
+
   pinMode(BeamBreakInput, INPUT);
 
   pinMode(Motor1A, OUTPUT);
@@ -729,10 +754,6 @@ void setup() {
   CheckIfHasBall();
   HasBallThenDribble();
 
-
-
-
-
-
+  CompassRotate();
 
 }
