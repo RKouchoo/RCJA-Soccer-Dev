@@ -695,11 +695,49 @@ void CompassConfigure() {
 }
 
 void CompassRotate() {
-  if (HasBall = true){
 
+  if (HasBall = true){
+    //get compass data
+
+    Wire.beginTransmission(CompassAddress);
+    Wire.write(CompassRegister); //select register 3, X MSB register
+    Wire.endTransmission();
+    Wire.requestFrom(CompassAddress, CompassByteLength);
+    if(CompassByteLength<=Wire.available()){
+      CompassZ = Wire.read()<<8; //Z msb
+      CompassZ |= Wire.read(); //Z lsb
+    }
+
+    //compare compass data
+
+    while ( CompassOriginalDirection_Z != CompassZ ){
+      Wire.beginTransmission(CompassAddress);
+      Wire.write(CompassRegister); //select register 3, X MSB register
+      Wire.endTransmission();
+       Wire.requestFrom(CompassAddress, CompassByteLength);
+      if(CompassByteLength<=Wire.available()){
+        CompassZ = Wire.read()<<8; //Z msb
+        CompassZ |= Wire.read(); //Z lsb
+
+        //turn accordingly towards the original direction
+        if(CompassZ < CompassOriginalDirection_Z )
+        {
+          TurnLEFT();
+        }
+
+        if (CompassZ > CompassOriginalDirection_Z)
+        {
+          TurnRIGHT();
+        }
+
+        else;
+        {
+          Serial.println("compass ERROR");
+        }
+      }
+    }
   }
 }
-
  //==========================================================================
 
 void setup() {
