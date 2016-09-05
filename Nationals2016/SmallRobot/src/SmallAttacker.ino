@@ -1,4 +1,4 @@
-/*
+g /*
  * Opens soccer robot main code set,
  * Team circut breaker Dev @RKouchoo
  *
@@ -66,36 +66,32 @@
   boolean HasBall = false;
   boolean BallIsTrue = false;
   boolean BallBeamBroken = false;
-  boolean isDribbling = false;
+  boolean isDribbling = false;z
 
   int DefendCountdown = 100;  //to be continued, look at documentation
 
   const int MotorMED_POWER = 115;  //can be used for motor setup functions max 255, -- will use when pwm cables are connected
   const int MotorFULL_POWER = 255;
   const int MotorLOW_POWER = 25;
-  int CurrentMotorSpeed = 0; //the speed that will change depending on disntance from the ball.
+  int CurrentMotorSpeed = 0;    //the speed that will change depending on disntance from the ball.
                                   //pwm speed and enable pins for the motor controllers
   const int Motor_EN_S_1_1 = 2;
   const int Motor_EN_S_1_2 = 3;
   const int Motor_EN_S_2_1 = 4;
   const int Motor_EN_S_2_2 = 5;
 
-  const int DribbleEn = 7;
-
   const int Motor1A = 38; //motor input pins A is forward, B is reverse
   const int Motor1B = 40;
-
   const int Motor2A = 42;
   const int Motor2B = 44;
-
   const int Motor3A = 46;
   const int Motor3B = 48;
-
   const int Motor4A = 50;
   const int Motor4B = 52;
 
   const int DribbleMotorA = 60;
   const int DribbleMotorB = 59;
+  const int DribbleEn = 7;
 
   const int LED_PWM_MAX_RATE = 255; //lighting stuff
   const int LED_PWM_MIN_RATE = 25;
@@ -748,7 +744,6 @@ void setup() {
   RobotInitLights();
   initlaser();
   InfraredSeeker::Initialize();
-
   CompassConfigure();
 
 
@@ -758,11 +753,6 @@ void setup() {
   pinMode(Motor_EN_S_2_1, OUTPUT);
   pinMode(Motor_EN_S_2_2, OUTPUT);
 
-  pinMode(DribbleMotorA, OUTPUT);
-  pinMode(DribbleMotorB, OUTPUT);
-
-  pinMode(BeamBreakInput, INPUT);
-
   pinMode(Motor1A, OUTPUT);
   pinMode(Motor1B, OUTPUT);
   pinMode(Motor2A, OUTPUT);
@@ -771,6 +761,10 @@ void setup() {
   pinMode(Motor3B, OUTPUT);
   pinMode(Motor4A, OUTPUT);
   pinMode(Motor4B, OUTPUT);
+
+  pinMode(DribbleMotorA, OUTPUT);
+  pinMode(DribbleMotorB, OUTPUT);
+  pinMode(BeamBreakInput, INPUT);
 
   Serial.println("HiTechnic IRSeeker V2 Initialised, robot has been initialised, loop program will now commence !");
   Serial.println("QUICK DEBUG: Compass start rotation = " + CompassOriginalDirection_Z);
@@ -792,7 +786,6 @@ void setup() {
   MoveToBall();
   CheckIfHasBall();
   HasBallThenDribble();
-
   CompassRotate();
-
+  
 }
