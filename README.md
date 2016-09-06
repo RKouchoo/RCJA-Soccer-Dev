@@ -9,6 +9,8 @@
 
   details about the compass sensor can be found on this data sheet http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Sensors/Magneto/HMC5883L-FDS.pdf
 
+  Latest code is being written in the Nationals2016 folder
+
   ===============
   CURRENT STATE:
   ===============
