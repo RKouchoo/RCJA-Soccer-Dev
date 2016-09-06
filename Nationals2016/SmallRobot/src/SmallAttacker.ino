@@ -1,4 +1,4 @@
-g /*
+ /*
  * Opens soccer robot main code set,
  * Team circut breaker Dev @RKouchoo
  *
@@ -243,7 +243,7 @@ int DirectionAngle(byte Direction)
 }
 //============================================================================================
 
-void CompassInit() {
+void CompassInit() {  //DEPRECIATED
 
     //initialise compass
     Wire.begin();
@@ -285,7 +285,7 @@ void CompassInit() {
 
 }
 
-void LightSensor() {
+void LightSensor() {//DEPRECIATED
 
   //LIGHT & Movement
 
@@ -741,11 +741,10 @@ void setup() {
   Serial.begin(9600);
 
   //initialise classes
+  InfraredSeeker::Initialize();
   RobotInitLights();
   initlaser();
-  InfraredSeeker::Initialize();
   CompassConfigure();
-
 
 //initialise motor outputs
   pinMode(Motor_EN_S_1_1, OUTPUT);
@@ -780,12 +779,12 @@ void setup() {
 
   InfraredResult InfraredBall = InfraredSeeker::ReadAC();
   byte Direction = InfraredBall.Direction;
-  
+
   TestForBall();
   DistanceMotorSpeed();
   MoveToBall();
   CheckIfHasBall();
   HasBallThenDribble();
   CompassRotate();
-  
+
 }
