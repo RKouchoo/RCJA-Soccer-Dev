@@ -1,4 +1,4 @@
-/*
+g /*
  * Opens soccer robot main code set,
  * Team circut breaker Dev @RKouchoo
  *
@@ -52,6 +52,8 @@
   const int LightsensorInput_1 = A0; //lightsensor analog read pin
   const int LightsensorInput_2 = A1;
 
+  const int BeamBreakInput = 34;
+
   int COLOR_GREEN_VALUE = 23;     //colour values which need to be changed, depends on feild lighting !
   int COLOR_WHITE_VALUE = 245;
 
@@ -59,31 +61,37 @@
   boolean IsMovingRight = false;
   boolean IsMovingBackward = false;
   boolean IsMovingForward = false;
+
   boolean BallInRange = false;
+  boolean HasBall = false;
+  boolean BallIsTrue = false;
+  boolean BallBeamBroken = false;
+  boolean isDribbling = false;z
 
   int DefendCountdown = 100;  //to be continued, look at documentation
 
   const int MotorMED_POWER = 115;  //can be used for motor setup functions max 255, -- will use when pwm cables are connected
   const int MotorFULL_POWER = 255;
   const int MotorLOW_POWER = 25;
+  int CurrentMotorSpeed = 0;    //the speed that will change depending on disntance from the ball.
                                   //pwm speed and enable pins for the motor controllers
   const int Motor_EN_S_1_1 = 2;
   const int Motor_EN_S_1_2 = 3;
   const int Motor_EN_S_2_1 = 4;
   const int Motor_EN_S_2_2 = 5;
 
-
   const int Motor1A = 38; //motor input pins A is forward, B is reverse
   const int Motor1B = 40;
-
   const int Motor2A = 42;
   const int Motor2B = 44;
-
   const int Motor3A = 46;
   const int Motor3B = 48;
-
   const int Motor4A = 50;
   const int Motor4B = 52;
+
+  const int DribbleMotorA = 60;
+  const int DribbleMotorB = 59;
+  const int DribbleEn = 7;
 
   const int LED_PWM_MAX_RATE = 255; //lighting stuff
   const int LED_PWM_MIN_RATE = 25;
@@ -104,8 +112,7 @@ void RobotInitLights() {
 void initlaser() {
  pinMode(LASER_OUTPUT_1, OUTPUT);
  pinMode(LASER_OUTPUT_2, OUTPUT);
-
-  digitalWrite(LASER_OUTPUT_1, HIGH);
+ digitalWrite(LASER_OUTPUT_1, HIGH);
  digitalWrite(LASER_OUTPUT_2, HIGH);
  }
 
@@ -279,8 +286,6 @@ void CompassInit() {
 }
 
 void LightSensor() {
-
-  //Serial.println("LightSensor value = " + RightLightsensorValue + ", " + LeftLightsensorValue);
 
   //LIGHT & Movement
 
@@ -460,10 +465,6 @@ void SetMotorSpeedOFF(){
   analogWrite(Motor_EN_S_2_2, LOW);
 }
 
-void CompassDribble() {
-
-}
-
 void TestForBall() {
 
   InfraredResult InfraredBall = InfraredSeeker::ReadAC();
@@ -494,10 +495,12 @@ void MoveToBall() {
      boolean IsMovingBackward = false;
      boolean IsMovingForward = false;
   //==========================================================================
+ if (BallInRange = true)
+ {
 
     if (InfraredBall.Direction == 1)
     {
-    SetMotorSpeedMED();
+    SetCurrentMotorSpeed();
     TurnRIGHT();
     //SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 1, TurnRIGHT()");
@@ -506,7 +509,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 2)
     {
-    SetMotorSpeedLOW();
+    SetCurrentMotorSpeed();
     TurnRIGHT();
   //  SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 2, TurnRIGHT()");
@@ -515,7 +518,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 3)
     {
-    SetMotorSpeedLOW();
+    SetCurrentMotorSpeed();
     TurnRIGHT();
   //  SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 3, MoveFORWARDRIGHT()");
@@ -524,7 +527,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 4)
     {
-    SetMotorSpeedMED();
+    SetCurrentMotorSpeed();
     MoveFORWARD();
   //  SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 4, MoveFORWARD()");
@@ -533,7 +536,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 5)
     {
-    SetMotorSpeedHIGH();
+    SetCurrentMotorSpeed();
     MoveFORWARD();
   //  SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 5, MoveFORWARD()");
@@ -542,7 +545,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 6)
     {
-    SetMotorSpeedMED();
+    SetCurrentMotorSpeed();
     MoveFORWARD();
     //SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 6, MoveFORWARD()");
@@ -551,7 +554,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 7)
     {
-    SetMotorSpeedLOW();
+    SetCurrentMotorSpeed();
     TurnLEFT();
     //SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 7, MoveFORWARDLEFT()");
@@ -560,7 +563,7 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 8)
     {
-    SetMotorSpeedLOW();
+    SetCurrentMotorSpeed();
     TurnLEFT();
     //SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 8, TurnLEFT()");
@@ -569,9 +572,8 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 9)
     {
-    SetMotorSpeedMED();
+    SetCurrentMotorSpeed();;
     TurnLEFT();
- SetMotorSpeedOFF();
     Serial.println("InfraredBall.Direction = 9, TurnLEFT()");
     boolean IsMovingLeft = true;
     }
@@ -580,14 +582,158 @@ void MoveToBall() {
 
     if (InfraredBall.Direction == 0)
     {
-    Serial.println("Wh-Wo-Jo-La Do ? - TurnRIGHT()");
+    Serial.println("What-Would-Joseph-Lai-Do ? - TurnRIGHT()");
     SetMotorSpeedLOW();
     TurnRIGHT();
     //SetMotorSpeedOFF();
     boolean IsMovingRight = true;
     }
+  };
 }
 
+void DistanceMotorSpeed() {
+  InfraredResult InfraredBall = InfraredSeeker::ReadAC();
+  byte Direction = InfraredBall.Direction;
+  byte Strength = InfraredBall.Strength;
+
+  if (InfraredBall.Strength >= 200)
+  {
+    CurrentMotorSpeed = MotorFULL_POWER;
+  }
+
+  if (InfraredBall.Strength <= 145)
+  {
+    CurrentMotorSpeed = MotorMED_POWER;
+  }
+
+  if (InfraredBall.Strength <= 65)
+  {
+    CurrentMotorSpeed = MotorLOW_POWER;
+  }
+
+}
+
+void CheckIfHasBall() {
+
+  int  BeamBreakTest = digitalRead(BeamBreakInput);
+
+  if (BeamBreakTest = HIGH) {
+  boolean BallIsTrue = true;
+  }
+  else;
+  {
+    boolean BallIsTrue = false;
+  }
+
+  if (BallIsTrue = true)
+  {
+    boolean BallBeamBroken = true;
+  }
+  else;
+  {
+    boolean BallBeamBroken = false;
+  }
+
+  if (BallBeamBroken = true)
+  {
+    Serial.println("Beam has been broken!");
+  }
+
+}
+
+void SetCurrentMotorSpeed() {
+  analogWrite(Motor_EN_S_1_1, CurrentMotorSpeed);
+  analogWrite(Motor_EN_S_1_2, CurrentMotorSpeed);
+  analogWrite(Motor_EN_S_2_1, CurrentMotorSpeed);
+  analogWrite(Motor_EN_S_2_2, CurrentMotorSpeed);
+
+}
+
+void HasBallThenDribble() {
+  if (HasBall = true) {
+    analogWrite(DribbleEn, MotorMED_POWER);
+    DribbleA();
+  }
+}
+void DribbleA() {
+  digitalWrite(DribbleMotorA, HIGH);
+  delay(25);
+  digitalWrite(DribbleMotorA, LOW);
+}
+
+void DribbleB() {
+  digitalWrite(DribbleMotorA, HIGH);
+  delay(25);
+  digitalWrite(DribbleMotorB, LOW);
+}
+//==========================================================================
+
+void CompassConfigure() {
+  //initialise compass
+  Wire.begin();
+  Wire.beginTransmission(CompassAddress); //open comms to the compass
+  Wire.write(CompassMode); //select mode register
+  Wire.write(CompassReadMode); //continuous measurement mode
+  Wire.endTransmission();
+  Wire.beginTransmission(CompassAddress);
+  Wire.write(CompassRegister); //select register 3, X MSB register, these valuses were found on the data sheet.
+  Wire.endTransmission();
+
+  //request data from the comnpass
+  Wire.requestFrom(CompassAddress, CompassByteLength);
+
+  //request data and set original direction, will be used for auto correct in the future.
+  if(CompassByteLength<=Wire.available()){
+    CompassOriginalDirection_Z = Wire.read()<<8; //Z msb
+    CompassOriginalDirection_Z |= Wire.read(); //Z lsb
+  }
+  Serial.println("Compass Original Var: " + CompassOriginalDirection_Z);
+}
+
+void CompassRotate() {
+
+  if (HasBall = true){
+    //get compass data
+
+    Wire.beginTransmission(CompassAddress);
+    Wire.write(CompassRegister); //select register 3, X MSB register
+    Wire.endTransmission();
+    Wire.requestFrom(CompassAddress, CompassByteLength);
+    if(CompassByteLength<=Wire.available()){
+      CompassZ = Wire.read()<<8; //Z msb
+      CompassZ |= Wire.read(); //Z lsb
+    }
+
+    //compare compass data
+
+    while ( CompassOriginalDirection_Z != CompassZ ){
+      Wire.beginTransmission(CompassAddress);
+      Wire.write(CompassRegister); //select register 3, X MSB register
+      Wire.endTransmission();
+       Wire.requestFrom(CompassAddress, CompassByteLength);
+      if(CompassByteLength<=Wire.available()){
+        CompassZ = Wire.read()<<8; //Z msb
+        CompassZ |= Wire.read(); //Z lsb
+
+        //turn accordingly towards the original direction
+        if(CompassZ < CompassOriginalDirection_Z )
+        {
+          TurnLEFT();
+        }
+
+        if (CompassZ > CompassOriginalDirection_Z)
+        {
+          TurnRIGHT();
+        }
+
+        else;
+        {
+          Serial.println("compass ERROR");
+        }
+      }
+    }
+  }
+}
  //==========================================================================
 
 void setup() {
@@ -598,6 +744,8 @@ void setup() {
   RobotInitLights();
   initlaser();
   InfraredSeeker::Initialize();
+  CompassConfigure();
+
 
 //initialise motor outputs
   pinMode(Motor_EN_S_1_1, OUTPUT);
@@ -614,6 +762,10 @@ void setup() {
   pinMode(Motor4A, OUTPUT);
   pinMode(Motor4B, OUTPUT);
 
+  pinMode(DribbleMotorA, OUTPUT);
+  pinMode(DribbleMotorB, OUTPUT);
+  pinMode(BeamBreakInput, INPUT);
+
   Serial.println("HiTechnic IRSeeker V2 Initialised, robot has been initialised, loop program will now commence !");
   Serial.println("QUICK DEBUG: Compass start rotation = " + CompassOriginalDirection_Z);
 }
@@ -628,9 +780,12 @@ void setup() {
 
   InfraredResult InfraredBall = InfraredSeeker::ReadAC();
   byte Direction = InfraredBall.Direction;
-
+  
+  TestForBall();
+  DistanceMotorSpeed();
   MoveToBall();
-
-
-
+  CheckIfHasBall();
+  HasBallThenDribble();
+  CompassRotate();
+  
 }
