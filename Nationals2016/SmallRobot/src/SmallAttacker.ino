@@ -648,13 +648,6 @@ void SetCurrentMotorSpeed() {
   analogWrite(Motor_EN_S_2_2, CurrentMotorSpeed);
 
 }
-
-void HasBallThenDribble() {
-  if (HasBall = true) {
-    analogWrite(DribbleEn, MotorMED_POWER);
-    DribbleA();
-  }
-}
 void DribbleA() {
   digitalWrite(DribbleMotorA, HIGH);
   delay(25);
@@ -666,7 +659,14 @@ void DribbleB() {
   delay(25);
   digitalWrite(DribbleMotorB, LOW);
 }
-//==========================================================================
+
+void HasBallThenDribble() {
+  if (HasBall = true) {
+    analogWrite(DribbleEn, MotorMED_POWER);
+    DribbleA();
+  }
+}
+//==============================================================================
 
 void CompassConfigure() {
   //initialise compass
