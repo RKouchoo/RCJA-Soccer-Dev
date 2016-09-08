@@ -62,7 +62,7 @@
  boolean IsMovingBackward = false;
  boolean IsMovingForward = false;
 
- boolean BallInRange = false;
+ boolean BallInRange = true;
  boolean HasBall = false;
  boolean BallIsTrue = false;
  boolean BallBeamBroken = false;
@@ -485,7 +485,7 @@ void TestForBall() {
 
 }
 
-void MoveToBall() {
+void DefendToBalll() {
  InfraredResult InfraredBall = InfraredSeeker::ReadAC();
  byte Direction = InfraredBall.Direction;
  //===========================================================================
@@ -780,11 +780,11 @@ void setup() {
  InfraredResult InfraredBall = InfraredSeeker::ReadAC();
  byte Direction = InfraredBall.Direction;
 
- TestForBall();
- DistanceMotorSpeed();
- MoveToBall();
- CheckIfHasBall();
- HasBallThenDribble();
- CompassRotate();
+ //TestForBall();
+ //DistanceMotorSpeed();
+ DefendToBall();
+ //CheckIfHasBall();
+ //HasBallThenDribble();
+ //CompassRotate();
 
 }
