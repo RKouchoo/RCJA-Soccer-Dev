@@ -618,11 +618,11 @@ void CheckIfHasBall() {
  int  BeamBreakTest = digitalRead(BeamBreakInput);
 
  if (BeamBreakTest = HIGH) {
- boolean BallIsTrue = true;
+ boolean BallIsTrue = false;
  }
  else;
  {
-   boolean BallIsTrue = false;
+   boolean BallIsTrue = true;
  }
 
  if (BallIsTrue = true)
@@ -742,6 +742,7 @@ void setup() {
 
  //initialise classes
  InfraredSeeker::Initialize();
+
  //RobotInitLights();
  //initlaser();
  //CompassConfigure();

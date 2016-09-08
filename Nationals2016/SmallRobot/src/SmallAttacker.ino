@@ -615,31 +615,32 @@ void DistanceMotorSpeed() {
 
 void CheckIfHasBall() {
 
-  int  BeamBreakTest = digitalRead(BeamBreakInput);
+ int  BeamBreakTest = digitalRead(BeamBreakInput);
 
-  if (BeamBreakTest = HIGH) {
-  boolean BallIsTrue = true;
-  }
-  else;
-  {
-    boolean BallIsTrue = false;
-  }
+ if (BeamBreakTest = HIGH) {
+ boolean BallIsTrue = false;
+ }
+ else;
+ {
+   boolean BallIsTrue = true;
+ }
 
-  if (BallIsTrue = true)
-  {
-    boolean BallBeamBroken = true;
-  }
-  else;
-  {
-    boolean BallBeamBroken = false;
-  }
+ if (BallIsTrue = true)
+ {
+   boolean BallBeamBroken = true;
+ }
+ else;
+ {
+   boolean BallBeamBroken = false;
+ }
 
-  if (BallBeamBroken = true)
-  {
-    Serial.println("Beam has been broken!");
-  }
+ if (BallBeamBroken = true)
+ {
+   Serial.println("Beam has been broken!");
+ }
 
 }
+
 
 void SetCurrentMotorSpeed() {
   analogWrite(Motor_EN_S_1_1, CurrentMotorSpeed);
