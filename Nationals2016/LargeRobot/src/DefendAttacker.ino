@@ -780,10 +780,10 @@ void setup() {
  InfraredResult InfraredBall = InfraredSeeker::ReadAC();
  byte Direction = InfraredBall.Direction;
 
+ DistanceMotorSpeed();
  DefendToBall();
 
  //TestForBall();
- //DistanceMotorSpeed();
  //CheckIfHasBall();
  //HasBallThenDribble();
  //CompassRotate();
