@@ -742,9 +742,9 @@ void setup() {
 
  //initialise classes
  InfraredSeeker::Initialize();
- RobotInitLights();
- initlaser();
- CompassConfigure();
+ //RobotInitLights();
+ //initlaser();
+ //CompassConfigure();
 
 //initialise motor outputs
  pinMode(Motor_EN_S_1_1, OUTPUT);
