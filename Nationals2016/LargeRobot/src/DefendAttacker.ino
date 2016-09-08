@@ -598,7 +598,7 @@ void DistanceMotorSpeed() {
 
  if (InfraredBall.Strength >= 200)
  {
-   CurrentMotorSpeed = MotorFULL_POWER;
+   CurrentMotorSpeed = MotorMED_POWER;
  }
 
  if (InfraredBall.Strength <= 145)
