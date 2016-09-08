@@ -66,7 +66,7 @@
  boolean HasBall = false;
  boolean BallIsTrue = false;
  boolean BallBeamBroken = false;
- boolean isDribbling = false;z
+ boolean isDribbling = false;
 
  int DefendCountdown = 100;  //to be continued, look at documentation
 
@@ -780,9 +780,10 @@ void setup() {
  InfraredResult InfraredBall = InfraredSeeker::ReadAC();
  byte Direction = InfraredBall.Direction;
 
+ DefendToBall();
+
  //TestForBall();
  //DistanceMotorSpeed();
- DefendToBall();
  //CheckIfHasBall();
  //HasBallThenDribble();
  //CompassRotate();
