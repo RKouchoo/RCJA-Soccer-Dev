@@ -1,5 +1,8 @@
 # RCJA Soccer Dev
 
+#This projecta has now been abandoned as we are no longer using it for next season.
+#please do not submit issues as we will not acknowledge them.
+
 @Team Circut Breaker Dev
 
   First created: 3 / 7 / 2015
